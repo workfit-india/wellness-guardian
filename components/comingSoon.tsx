@@ -96,7 +96,7 @@ export default function ComingSoon() {
           </div>
           <div className="mt-1">
             <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent">
-              WorkFit Inidia
+              Workfit India
             </h1>
             {/* <p className="text-slate-300 text-lg mt-2">Innovation Redefined</p> */}
           </div>
@@ -119,7 +119,7 @@ export default function ComingSoon() {
             </span>
           </h2>
           <p className="text-slate-300 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
-            Your personal workplace wellness Guardian, which is habit-tracking SaaS focused on break reminders and screen time monitoring
+            Stop Screen Fatigue Before It Stops You - Intelligent Workplace Wellness That Actually Works
           </p>
         </div>
 
