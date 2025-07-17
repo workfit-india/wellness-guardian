@@ -3,13 +3,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { 
-  Twitter, 
   Facebook, 
   Instagram, 
   Linkedin,
   Mail, 
   Rocket,
-  Clock
+  Clock,
+  X
 } from 'lucide-react';
 
 export default function ComingSoon() {
@@ -46,7 +46,7 @@ useEffect(() => {
 
 
   const socialLinks = [
-    { icon: Twitter, href: '#', label: 'Twitter', color: 'hover:text-blue-400' },
+    { icon: X, href: '#', label: 'Twitter', color: 'hover:text-blue-400' },
     { icon: Facebook, href: '#', label: 'Facebook', color: 'hover:text-blue-600' },
     { icon: Instagram, href: '#', label: 'Instagram', color: 'hover:text-pink-500' },
     { icon: Linkedin, href: '#', label: 'LinkedIn', color: 'hover:text-blue-700' },
@@ -122,7 +122,7 @@ useEffect(() => {
                   <div className="text-2xl md:text-3xl font-bold text-white mb-1">
                     {item.value.toString().padStart(2, '0')}
                   </div>
-                  <div className="text-xs text-slate-400 uppercase tracking-wide">
+                  <div className="text-[10px] sm:text-xs md:text-sm text-slate-400 uppercase tracking-wide">
                     {item.label}
                   </div>
                 </CardContent>
