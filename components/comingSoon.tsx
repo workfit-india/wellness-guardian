@@ -1,24 +1,18 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useEffect, useMemo } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import { 
   Twitter, 
   Facebook, 
   Instagram, 
   Linkedin,
   Mail, 
-  Bell,
-  Sparkles,
   Rocket,
   Clock
 } from 'lucide-react';
 
 export default function ComingSoon() {
-  const [email, setEmail] = useState('');
-  const [isSubscribed, setIsSubscribed] = useState(false);
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -26,35 +20,30 @@ export default function ComingSoon() {
     seconds: 0
   });
 
-  const launchDate = new Date();
-  launchDate.setDate(launchDate.getDate() + 75);
+const launchDate = useMemo(() => {
+  const date = new Date();
+  date.setDate(date.getDate() + 75);
+  return date;
+}, []);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const now = new Date().getTime();
-      const distance = launchDate.getTime() - now;
+useEffect(() => {
+  const timer = setInterval(() => {
+    const now = new Date().getTime();
+    const distance = launchDate.getTime() - now;
 
-      if (distance > 0) {
-        setTimeLeft({
-          days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-          minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-          seconds: Math.floor((distance % (1000 * 60)) / 1000)
-        });
-      }
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [launchDate]);
-
-  const handleEmailSubmit = (e: any) => {
-    e.preventDefault();
-    if (email) {
-      setIsSubscribed(true);
-      setEmail('');
-      setTimeout(() => setIsSubscribed(false), 3000);
+    if (distance > 0) {
+      setTimeLeft({
+        days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+        minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+        seconds: Math.floor((distance % (1000 * 60)) / 1000)
+      });
     }
-  };
+  }, 1000);
+
+  return () => clearInterval(timer);
+}, [launchDate]);
+
 
   const socialLinks = [
     { icon: Twitter, href: '#', label: 'Twitter', color: 'hover:text-blue-400' },
@@ -142,42 +131,6 @@ export default function ComingSoon() {
           </div>
         </div>
 
-        {/* Email Subscription */}
-        {/* <div className="mb-12">
-          <Card className="bg-white/10 backdrop-blur-sm border-white/20 max-w-md mx-auto">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-center mb-4">
-                <Bell className="w-5 h-5 text-yellow-400 mr-2" />
-                <span className="text-white font-semibold">Get Notified</span>
-              </div>
-              <p className="text-slate-300 text-sm mb-4">
-                Be the first to know when we launch. No spam, just updates.
-              </p>
-              
-              {isSubscribed ? (
-                <div className="text-green-400 text-sm font-medium py-3">
-                  ✓ Successfully subscribed! We'll keep you updated.
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  <Input
-                    type="email"
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="bg-white/20 border-white/30 text-white placeholder-slate-400 focus:border-purple-400"
-                  />
-                  <Button
-                    onClick={handleEmailSubmit}
-                    className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-0 transform hover:scale-105 transition-all duration-200"
-                  >
-                    Notify Me
-                  </Button>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </div> */}
         <div className="mb-8">
           <p className="text-slate-400 text-sm mb-4">Follow us for updates</p>
           <div className="flex justify-center space-x-6">
