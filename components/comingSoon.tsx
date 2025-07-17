@@ -47,7 +47,7 @@ export default function ComingSoon() {
     return () => clearInterval(timer);
   }, [launchDate]);
 
-  const handleEmailSubmit = (e) => {
+  const handleEmailSubmit = (e: any) => {
     e.preventDefault();
     if (email) {
       setIsSubscribed(true);
