@@ -37,7 +37,7 @@ export default function DashboardPage() {
     console.log(`Looking for key: "${trimmedKey}"`);
     console.log("Available keys:", Object.keys(tagVideo));
     
-    const values = tagVideo[trimmedKey];
+    const values = tagVideo[trimmedKey as keyof typeof tagVideo];
     
     if (!values) {
       console.error(`Key "${trimmedKey}" not found in data.`);
@@ -56,8 +56,7 @@ export default function DashboardPage() {
   }
 
   const handleTagSearch = (param: string[]) => {
-    console.log("here I on search", param);
-    const videoId = getRandomValue("happiness");
+    const videoId = getRandomValue(param[0]);
     if (videoId) {
       setSelectedVideo(videoId);
     }
