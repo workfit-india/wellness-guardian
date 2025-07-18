@@ -1,4 +1,6 @@
-// import { Button } from '@/components/ui/button'
+'use client'
+
+import { useState } from 'react'
 import {
   Card,
   CardContent,
@@ -6,7 +8,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import {
+   Tabs,
+   TabsContent,
+  //  TabsList,
+  //  TabsTrigger
+} from '@/components/ui/tabs'
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
 import { TopNav } from '@/components/layout/top-nav'
@@ -14,10 +21,49 @@ import { ProfileDropdown } from '@/components/profile-dropdown'
 // import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
 // import { Overview } from './components/overview'
-import { RecentSales } from './components/recent-sales'
+// import { RecentSales } from './components/recent-sales'
 import YouTubeEmbed from '../video-demo/components/youtube-embed'
+import TagSelector from '@/components/tag-selector/tag-selector'
+import TrendingTags from './components/trending-tags'
+// import { Button } from '@/components/ui/button'
+import { tagVideo } from "@/components/tag-selector/data/tagVideo"
+
 
 export default function DashboardPage() {
+  const [selectedVideo, setSelectedVideo] = useState("QKFYo8VXYmY")
+
+  const getRandomValue = (key: string) => {
+    const trimmedKey = key.trim();
+    console.log(`Looking for key: "${trimmedKey}"`);
+    console.log("Available keys:", Object.keys(tagVideo));
+    
+    const values = tagVideo[trimmedKey];
+    
+    if (!values) {
+      console.error(`Key "${trimmedKey}" not found in data.`);
+      return null;
+    }
+    
+    if (values.length === 0) {
+      console.error(`No values available for key "${trimmedKey}".`);
+      return null;
+    }
+    
+    const randomIndex = Math.floor(Math.random() * values.length);
+    console.log(`Selected index ${randomIndex} from array of length ${values.length}`);
+    return values[randomIndex];
+    
+  }
+
+  const handleTagSearch = (param: string[]) => {
+    console.log("here I on search", param);
+    const videoId = getRandomValue("happiness");
+    if (videoId) {
+      setSelectedVideo(videoId);
+    }
+
+  }
+
   return (
     <>
       {/* ===== Top Heading ===== */}
@@ -25,6 +71,7 @@ export default function DashboardPage() {
         <TopNav links={topNav} />
         <div className='ml-auto flex items-center space-x-4'>
           {/* <Search /> */}
+          {/* <TagSelector /> */}
           <ThemeSwitch />
           <ProfileDropdown />
         </div>
@@ -33,7 +80,7 @@ export default function DashboardPage() {
       {/* ===== Main ===== */}
       <Main>
         <div className='mb-2 flex items-center justify-between space-y-2'>
-          <h1 className='text-2xl font-bold tracking-tight'>Dashboard</h1>
+          {/* <h1 className='text-2xl font-bold tracking-tight'>Dashboard</h1> */}
           {/* <div className='flex items-center space-x-2'>
             <Button>Download</Button>
           </div> */}
@@ -43,7 +90,7 @@ export default function DashboardPage() {
           defaultValue='overview'
           className='space-y-4'
         >
-          <div className='w-full overflow-x-auto pb-2'>
+          {/* <div className='w-full overflow-x-auto pb-2'>
             <TabsList>
               <TabsTrigger value='overview'>Overview</TabsTrigger>
               <TabsTrigger value='analytics' disabled>
@@ -56,10 +103,12 @@ export default function DashboardPage() {
                 Notifications
               </TabsTrigger>
             </TabsList>
-          </div>
+          </div> */}
+          <TagSelector onSearch={handleTagSearch}/>
           <TabsContent value='overview' className='space-y-4'>
             <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
-              <Card>
+              
+              {/* <Card>
                 <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
                   <CardTitle className='text-sm font-medium'>
                     Total Revenue
@@ -159,7 +208,7 @@ export default function DashboardPage() {
                     +201 since last hour
                   </p>
                 </CardContent>
-              </Card>
+              </Card> */}
             </div>
             <div className='grid grid-cols-1 gap-4 lg:grid-cols-7'>
               <Card className='col-span-1 lg:col-span-4'>
@@ -168,18 +217,19 @@ export default function DashboardPage() {
                 </CardHeader> */}
                 <CardContent>
                   {/* <Overview /> */}
-                  <YouTubeEmbed videoId="dQw4w9WgXcQ" title="My YouTube Video"/>
+                  <YouTubeEmbed videoId={selectedVideo} title="My YouTube Video"/>
                 </CardContent>
               </Card>
               <Card className='col-span-1 lg:col-span-3'>
                 <CardHeader>
-                  <CardTitle>Recent Sales</CardTitle>
+                  <CardTitle>Recent Trends</CardTitle>
                   <CardDescription>
-                    You made 265 sales this month.
+                    People searched these tags in last 30 days.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <RecentSales />
+                  {/* <RecentSales /> */}
+                  <TrendingTags />
                 </CardContent>
               </Card>
             </div>
