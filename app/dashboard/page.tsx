@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button'
+// import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -11,9 +11,9 @@ import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
 import { TopNav } from '@/components/layout/top-nav'
 import { ProfileDropdown } from '@/components/profile-dropdown'
-import { Search } from '@/components/search'
+// import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
-import { Overview } from './components/overview'
+// import { Overview } from './components/overview'
 import { RecentSales } from './components/recent-sales'
 import YouTubeEmbed from '../video-demo/components/youtube-embed'
 

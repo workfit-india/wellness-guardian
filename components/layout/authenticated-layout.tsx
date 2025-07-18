@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 // import Cookies from 'js-cookie'
 import { cn } from '@/lib/utils'
 import { SearchProvider } from '@/context/search-context'
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import { SidebarProvider } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/layout/app-sidebar'
 import SkipToMain from '@/components/skip-to-main'
 
