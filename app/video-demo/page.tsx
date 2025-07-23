@@ -1,6 +1,6 @@
 'use client'
 
-import YouTubeEmbed from "./components/youtube-embed";
+import YouTubeEmbed from "@/app/video-demo/components/youtube-embed";
 
 export default function VideoDemo() {
   return (
