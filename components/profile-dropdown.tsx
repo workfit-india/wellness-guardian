@@ -13,7 +13,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import workfit from '@/assets/workfit.png';
+// import workfit from '@/assets/workfit.png';
 
 export function ProfileDropdown() {
   return (
@@ -21,7 +21,7 @@ export function ProfileDropdown() {
       <DropdownMenuTrigger asChild>
         <Button variant='ghost' className='relative h-8 w-8 rounded-full'>
           <Avatar className='h-10 w-8'>
-            <AvatarImage src={workfit.src} alt="@shadcn" />
+            <AvatarImage src='../assets/workfit.png' alt="@shadcn" />
             <AvatarFallback>SN</AvatarFallback>
           </Avatar>
         </Button>
