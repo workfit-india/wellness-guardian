@@ -3,7 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
-export default function TrendingTags() {
+export default function TrendingTags({ onTagSelection }) {
 
   const tranding = [
     "happiness",
@@ -21,10 +21,20 @@ export default function TrendingTags() {
     "seed of life meditation"
   ];
 
+  const onTagClick = (tag: string) => {
+    console.log("here;;;", tag);
+    onTagSelection([tag]);
+  }
+
   return <>
     <div className="flex flex-wrap gap-2">
       {tranding.map((tag) => (
-        <Badge key={tag} variant="secondary" className="flex items-center gap-1 text-green-600">
+        <Badge
+          key={tag}
+          variant="secondary"
+          className="flex items-center gap-1 text-green-600"
+          onClick={() => onTagClick(tag)}
+        >
           {tag}
           <Button
             variant="ghost"
