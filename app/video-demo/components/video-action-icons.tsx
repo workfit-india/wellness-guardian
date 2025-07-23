@@ -33,7 +33,7 @@ export default function VideoActionIcons() {
     }
   };
 
-  const formatCount = (count) => {
+  const formatCount = (count: number) => {
     if (count >= 1000000) {
       return (count / 1000000).toFixed(1) + 'M';
     } else if (count >= 1000) {
