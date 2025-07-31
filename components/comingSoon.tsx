@@ -22,7 +22,7 @@ export default function ComingSoon() {
 
 const launchDate = useMemo(() => {
   const date = new Date();
-  date.setDate(date.getDate() + 70);
+  date.setDate(date.getDate() + 61);
   return date;
 }, []);
 
