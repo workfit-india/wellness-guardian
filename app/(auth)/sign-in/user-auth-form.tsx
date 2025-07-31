@@ -1,13 +1,7 @@
 "use client";
-import { HTMLAttributes, useState } from 'react'
-import { z } from 'zod'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-// import { Link } from '@tanstack/react-router'
-import Link from 'next/link'
-import { IconBrandFacebook, IconBrandGithub } from '@tabler/icons-react'
+
+import { IconBrandFacebook } from '@tabler/icons-react'
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -15,30 +9,35 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { PasswordInput } from '@/components/passwordInput';
+} from '@/components/ui/form';
+// import { passwordMatchSchema } from '@/validation/passwordMatchSchema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from "next/navigation";
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form'
+import { z } from 'zod';
+import { loginUser } from './action';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Loader2 } from "lucide-react";
+import Link from 'next/link';
+import GoogleSignin from './GoogleSignin';
+
+// import { PasswordInput } from '@/components/passwordInput';
+import { passwordSchema } from '@/validation/passwordSchema';
 
 
-type UserAuthFormProps = HTMLAttributes<HTMLFormElement>
+// type UserAuthFormProps = HTMLAttributes<HTMLFormElement>
 
 const formSchema = z.object({
-  email: z
-    .string()
-    .min(1, { message: 'Please enter your email' })
-    .email({ message: 'Invalid email address' }),
-  password: z
-    .string()
-    .min(1, {
-      message: 'Please enter your password',
-    })
-    .min(7, {
-      message: 'Password must be at least 7 characters long',
-    }),
+  email: z.string().email(),
+  password: passwordSchema
 })
-
-export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-  const [isLoading, setIsLoading] = useState(false)
+//export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+export function UserAuthForm() {
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -48,21 +47,37 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     },
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    setIsLoading(true)
-    console.info(data)
+  const handleSubmit = async (data: z.infer<typeof formSchema>) => {
+    setServerError(null);
+    setIsLoading(true); // Set loading to true when submission starts
 
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
-  }
+    try {
+      const response = await loginUser({
+        email: data.email,
+        password: data.password,
+      });
+
+      if (response.error) {
+        setServerError(response.message);
+      } else {
+        // Redirect to the dashboard page
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      setServerError("An unexpected error occurred. Please try again.");
+      console.error(error);
+    } finally {
+      setIsLoading(false); // Set loading to false when submission ends
+    }
+  };
+
+  // const email = form.getValues("email");
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className={cn('grid gap-3', className)}
-        {...props}
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className={cn('grid gap-3')}
       >
         <FormField
           control={form.control}
@@ -84,7 +99,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             <FormItem className='relative'>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <PasswordInput placeholder='********' {...field} />
+                {/* <PasswordInput placeholder='********' {...field} /> */}
+                <Input {...field} type="password" />
               </FormControl>
               <FormMessage />
               <Link
@@ -96,8 +112,16 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             </FormItem>
           )}
         />
-        <Button className='mt-2' disabled={isLoading}>
-          Login
+        {serverError && (<p className="text-red-500 text-sm mt-2">{serverError}</p>)}
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Please wait
+            </>
+          ) : (
+            "Login"
+          )}
         </Button>
 
         <div className='relative my-2'>
@@ -112,9 +136,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         </div>
 
         <div className='grid grid-cols-2 gap-2'>
-          <Button variant='outline' type='button' disabled={isLoading}>
+          {/* <Button variant='outline' type='button' disabled={isLoading}>
             <IconBrandGithub className='h-4 w-4' /> GitHub
-          </Button>
+          </Button> */}
+          <GoogleSignin />
           <Button variant='outline' type='button' disabled={isLoading}>
             <IconBrandFacebook className='h-4 w-4' /> Facebook
           </Button>

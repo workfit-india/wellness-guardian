@@ -1,6 +1,6 @@
 "use client";
 
-import { HTMLAttributes, useState } from 'react'
+import { useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -18,8 +18,8 @@ import {
 import { Input } from '@/components/ui/input'
 // import { PasswordInput } from '@/components/password-input'
 import { PasswordInput } from '@/components/passwordInput';
-
-type SignUpFormProps = HTMLAttributes<HTMLFormElement>
+import { useRouter } from "next/navigation";
+import { registerUser } from '../action';
 
 const formSchema = z
   .object({
@@ -42,8 +42,11 @@ const formSchema = z
     path: ['confirmPassword'],
   })
 
-export function SignUpForm({ className, ...props }: SignUpFormProps) {
-  const [isLoading, setIsLoading] = useState(false)
+// export function SignUpForm({ className, ...props }: SignUpFormProps) {
+export function SignUpForm() {
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false); // Add loading state
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -54,21 +57,35 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
     },
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    setIsLoading(true)
-    console.info(data)
+  const handleSubmit = async (data: z.infer<typeof formSchema>) => {
+    setServerError(null);
+    setIsLoading(true); // Set loading to true when submission starts
 
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
-  }
+    try {
+      const response = await registerUser({
+        email: data.email,
+        password: data.password,
+        passwordConfirm: data.confirmPassword,
+      });
+
+      if (response.error) {
+        setServerError(response.message);
+      } else {
+        router.push("/sign-in");
+      }
+    } catch (error) {
+      setServerError("An unexpected error occurred. Please try again.");
+      console.error(error);
+    } finally {
+      setIsLoading(false); // Set loading to false when submission ends
+    }
+  };
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className={cn('grid gap-3', className)}
-        {...props}
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className={cn('grid gap-3')}
       >
         <FormField
           control={form.control}
@@ -109,6 +126,9 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
             </FormItem>
           )}
         />
+        {serverError && (
+          <p className="text-red-500 text-sm mt-2">{serverError}</p>
+        )}
         <Button className='mt-2' disabled={isLoading}>
           Create Account
         </Button>

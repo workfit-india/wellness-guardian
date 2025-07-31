@@ -1,5 +1,3 @@
-"use client";
-
 import Link from 'next/link';
 import {
   Card,
@@ -11,8 +9,17 @@ import {
 } from '@/components/ui/card'
 import AuthLayout from '../auth-layout'
 import { SignUpForm } from './components/sign-up-form'
+import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
 
-export default function SignUpPage() {
+export default async function SignUpPage() {
+
+  const supabase = createClient();
+  const { data } = await supabase.auth.getUser();
+  if (data.user) {
+    redirect("/dashboard");
+  }
+
   return (
     <AuthLayout>
       <Card className='gap-4'>

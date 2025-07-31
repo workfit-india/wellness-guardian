@@ -1,8 +1,8 @@
 'use client'
 
-import Link from 'next/link'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
+import Link from 'next/link';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,26 +12,82 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-// import workfit from '@/assets/workfit.png';
+} from '@/components/ui/dropdown-menu';
+import { logout } from '@/app/dashboard/action';
+import { createClient } from "@/utils/supabase/client";
+import { useEffect, useState } from 'react';
+import { getInitials } from '@/lib/utils';
+
+export interface UserProfile {
+  avatar_url?: string;
+  email: string;
+  email_verified: boolean;
+  full_name: string;
+  iss: string;
+  name: string;
+  phone_verified: boolean;
+  picture?: string;
+  provider_id: string;
+  sub: string;
+}
 
 export function ProfileDropdown() {
+
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const supabase = createClient();
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data } = await supabase.auth.getUser();
+      if (data.user) {
+        const { user_metadata } = data.user;
+        const userProfile: UserProfile = {
+          avatar_url: user_metadata.avatar_url || user_metadata.picture || '',
+          email: data.user.email || user_metadata.email || '',
+          email_verified: user_metadata.email_verified || false,
+          full_name: user_metadata.full_name || user_metadata.name || '',
+          iss: user_metadata.iss || '',
+          name: user_metadata.name || user_metadata.full_name || '',
+          phone_verified: user_metadata.phone_verified || false,
+          picture: user_metadata.picture || user_metadata.avatar_url || '',
+          provider_id: user_metadata.provider_id || user_metadata.sub || '',
+          sub: user_metadata.sub || ''
+        };
+        setUser(userProfile);
+      }
+      setLoading(false);
+    };
+    getUser();
+  });
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (!user) {
+    return <div>No user found</div>;
+  }
+
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <Button variant='ghost' className='relative h-8 w-8 rounded-full'>
-          <Avatar className='h-10 w-8'>
-            <AvatarImage src='../assets/workfit.png' alt="@shadcn" />
-            <AvatarFallback>SN</AvatarFallback>
+        <Button variant='ghost' className='relative h-10 w-10 rounded-full'>
+          <Avatar className='h-10 w-10'>
+            <AvatarImage 
+              src={user.picture || user.avatar_url || '../assets/workfit.png'} 
+              alt={user.full_name || user.name || 'User'}
+            />
+            <AvatarFallback>{getInitials(user.full_name) || 'WF'}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-56' align='end' forceMount>
         <DropdownMenuLabel className='font-normal'>
           <div className='flex flex-col space-y-1'>
-            <p className='text-sm leading-none font-medium'>Workfit India</p>
+            <p className='text-sm leading-none font-medium'>{user.full_name}</p>
             <p className='text-muted-foreground text-xs leading-none'>
-              workfitindia@gmail.com
+              {user.email}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -58,7 +114,7 @@ export function ProfileDropdown() {
           <DropdownMenuItem>New Team</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={() => logout()}>
           Log out
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
