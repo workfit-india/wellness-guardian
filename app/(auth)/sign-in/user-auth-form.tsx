@@ -1,6 +1,7 @@
 "use client";
 
-import { IconBrandFacebook } from '@tabler/icons-react'
+// import { IconBrandFacebook } from '@tabler/icons-react'
+import Image from "next/image";
 import { cn } from '@/lib/utils'
 import {
   Form,
@@ -136,12 +137,15 @@ export function UserAuthForm() {
         </div>
 
         <div className='grid grid-cols-2 gap-2'>
-          {/* <Button variant='outline' type='button' disabled={isLoading}>
-            <IconBrandGithub className='h-4 w-4' /> GitHub
-          </Button> */}
           <GoogleSignin />
-          <Button variant='outline' type='button' disabled={isLoading}>
-            <IconBrandFacebook className='h-4 w-4' /> Facebook
+          <Button variant='outline' type='button' className="cursor-not-allowed" disabled>
+            <Image
+              src="https://authjs.dev/img/providers/facebook.svg"
+              alt="Google logo"
+              width={20}
+              height={20}
+              className="mr-2"
+            /> Facebook
           </Button>
         </div>
       </form>
