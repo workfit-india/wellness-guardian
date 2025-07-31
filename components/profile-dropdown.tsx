@@ -17,19 +17,8 @@ import { logout } from '@/app/dashboard/action';
 import { createClient } from "@/utils/supabase/client";
 import { useEffect, useState } from 'react';
 import { getInitials } from '@/lib/utils';
-
-export interface UserProfile {
-  avatar_url?: string;
-  email: string;
-  email_verified: boolean;
-  full_name: string;
-  iss: string;
-  name: string;
-  phone_verified: boolean;
-  picture?: string;
-  provider_id: string;
-  sub: string;
-}
+import { UserProfile } from '@/app/types/types';
+import { User } from "lucide-react";
 
 export function ProfileDropdown() {
 
@@ -65,20 +54,24 @@ export function ProfileDropdown() {
   if (loading) {
     return <div>Loading...</div>;
   }
+
+  const imageUrl = user?.picture || user?.avatar_url || '../assets/workfit.png';
+  const altText = user?.full_name || user?.name || 'User';
+  const initials = user?.full_name ? getInitials(user.full_name) : null;
+
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <Button variant='ghost' className='relative h-10 w-10 rounded-full'>
           <Avatar className='h-10 w-10'>
-            <AvatarImage 
-              src={user ? (user.picture || user.avatar_url) : '../assets/workfit.png'} 
-              alt={user ? (user.full_name || user.name) : 'User'}
-            />
-            <AvatarFallback>{user ? getInitials(user.full_name) : 'WF'}</AvatarFallback>
+            <AvatarImage src={imageUrl} alt={altText} />
+            <AvatarFallback>
+              {initials || <User className="h-5 w-5 text-muted-foreground" />}
+            </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className='w-56' align='end' forceMount>
+      {user ?<DropdownMenuContent className='w-56' align='end' forceMount>
         <DropdownMenuLabel className='font-normal'>
           <div className='flex flex-col space-y-1'>
             <p className='text-sm leading-none font-medium'>{user ? user.full_name : ''}</p>
@@ -114,7 +107,7 @@ export function ProfileDropdown() {
           Log out
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
-      </DropdownMenuContent>
+      </DropdownMenuContent> : ''}
     </DropdownMenu>
   )
 }

@@ -141,7 +141,7 @@ export function UserAuthForm() {
           <Button variant='outline' type='button' className="cursor-not-allowed" disabled>
             <Image
               src="https://authjs.dev/img/providers/facebook.svg"
-              alt="Google logo"
+              alt="FB logo"
               width={20}
               height={20}
               className="mr-2"

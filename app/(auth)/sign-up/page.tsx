@@ -32,7 +32,7 @@ export default async function SignUpPage() {
             Already have an account?{' '}
             <Link
               href='/sign-in'
-              className='hover:text-primary underline underline-offset-4'
+              className='hover:text-primary underline underline-offset-4 font-medium'
             >
               Sign In
             </Link>

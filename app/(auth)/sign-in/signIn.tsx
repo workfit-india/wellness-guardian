@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/card'
 import AuthLayout from '../auth-layout';
 import { UserAuthForm } from './user-auth-form';
+import Link from 'next/link';
 
 export default function SignIn() {
   return (
@@ -17,7 +18,8 @@ export default function SignIn() {
           <CardTitle className='text-lg tracking-tight'>Login</CardTitle>
           <CardDescription>
             Enter your email and password below to <br />
-            log into your account
+            log into your account. Don&apos;t have an account?
+            <Link href="/sign-up" className='hover:text-primary underline underline-offset-4 font-medium'> Sign up</Link>
           </CardDescription>
         </CardHeader>
         <CardContent>
