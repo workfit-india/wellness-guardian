@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from 'react'
+import Image from "next/image";
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { IconBrandFacebook, IconBrandGithub } from '@tabler/icons-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -18,8 +18,11 @@ import {
 import { Input } from '@/components/ui/input'
 // import { PasswordInput } from '@/components/password-input'
 import { PasswordInput } from '@/components/passwordInput';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { useRouter } from "next/navigation";
+import { CheckCircle } from 'lucide-react'; 
 import { registerUser } from '../action';
+import GoogleSignin from '../../sign-in/GoogleSignin';
 
 const formSchema = z
   .object({
@@ -45,7 +48,8 @@ const formSchema = z
 // export function SignUpForm({ className, ...props }: SignUpFormProps) {
 export function SignUpForm() {
   const [serverError, setServerError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false); // Add loading state
+  const [isLoading, setIsLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -71,7 +75,10 @@ export function SignUpForm() {
       if (response.error) {
         setServerError(response.message);
       } else {
-        router.push("/sign-in");
+        setShowSuccess(true);
+        setTimeout(() => {
+          router.push('/sign-in');
+        }, 5000);
       }
     } catch (error) {
       setServerError("An unexpected error occurred. Please try again.");
@@ -133,6 +140,16 @@ export function SignUpForm() {
           Create Account
         </Button>
 
+        {showSuccess && (
+          <Alert variant="default" className="mb-4 border-green-500 bg-green-50">
+            <CheckCircle className="h-5 w-5 text-green-600" />
+            <AlertTitle className="text-green-700">Registration Successful!</AlertTitle>
+            <AlertDescription className="text-green-600">
+              You're almost there! We've sent a confirmation email to your address. Click the link inside to activate your account.
+            </AlertDescription>
+          </Alert>
+        )}
+
         <div className='relative my-2'>
           <div className='absolute inset-0 flex items-center'>
             <span className='w-full border-t' />
@@ -145,21 +162,15 @@ export function SignUpForm() {
         </div>
 
         <div className='grid grid-cols-2 gap-2'>
-          <Button
-            variant='outline'
-            className='w-full'
-            type='button'
-            disabled={isLoading}
-          >
-            <IconBrandGithub className='h-4 w-4' /> GitHub
-          </Button>
-          <Button
-            variant='outline'
-            className='w-full'
-            type='button'
-            disabled={isLoading}
-          >
-            <IconBrandFacebook className='h-4 w-4' /> Facebook
+          <GoogleSignin />
+          <Button variant='outline' type='button' className="cursor-not-allowed" disabled>
+            <Image
+              src="https://authjs.dev/img/providers/facebook.svg"
+              alt="FB logo"
+              width={20}
+              height={20}
+              className="mr-2"
+            /> Facebook
           </Button>
         </div>
       </form>
