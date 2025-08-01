@@ -49,7 +49,7 @@ const formSchema = z
 export function SignUpForm() {
   const [serverError, setServerError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(true);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -145,7 +145,7 @@ export function SignUpForm() {
             <CheckCircle className="h-5 w-5 text-green-600" />
             <AlertTitle className="text-green-700">Registration Successful!</AlertTitle>
             <AlertDescription className="text-green-600">
-              You're almost there! We've sent a confirmation email to your address. Click the link inside to activate your account.
+              You&apos;re almost there! We&apos;ve sent a confirmation email to your address. Click the link inside to activate your account.
             </AlertDescription>
           </Alert>
         )}
