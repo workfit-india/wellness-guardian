@@ -54,13 +54,7 @@ const accountFormSchema = z.object({
     .max(30, {
       message: 'Name must not be longer than 30 characters.',
     }),
-  dob: z
-    .string()
-    .nonempty({ message: 'A date of birth is required.' })
-    .refine((val) => !isNaN(Date.parse(val)), {
-      message: 'Invalid date format.',
-    }),
-
+  dob: z.date(),
   language: z
     .string()
     .nonempty({ message: 'Please select a language.' }),
