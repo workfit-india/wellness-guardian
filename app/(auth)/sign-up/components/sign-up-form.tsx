@@ -49,7 +49,7 @@ const formSchema = z
 export function SignUpForm() {
   const [serverError, setServerError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(true);
+  const [showSuccess, setShowSuccess] = useState(false);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
