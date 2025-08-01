@@ -1,14 +1,14 @@
 "use client"
 
 import { z } from 'zod'
-import { format } from 'date-fns'
+// import { format } from 'date-fns'
 import { useForm } from 'react-hook-form'
 import { CalendarIcon } from '@radix-ui/react-icons'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { cn } from '@/lib/utils'
+// import { cn } from '@/lib/utils'
 import { showSubmittedData } from '@/utils/show-submitted-data'
 import { Button } from '@/components/ui/button'
-import { Calendar } from '@/components/ui/calendar'
+// import { Calendar } from '@/components/ui/calendar'
 // import {
 //   Command,
 //   CommandEmpty,
@@ -27,11 +27,11 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
+// import {
+//   Popover,
+//   PopoverContent,
+//   PopoverTrigger,
+// } from '@/components/ui/popover'
 
 // const languages = [
 //   { label: 'English', value: 'en' },
@@ -97,7 +97,7 @@ export function AccountForm() {
             </FormItem>
           )}
         />
-        <FormField
+        {/* <FormField
           control={form.control}
           name='dob'
           render={({ field }) => (
@@ -139,7 +139,7 @@ export function AccountForm() {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
         {/* <FormField
           control={form.control}
           name='language'
