@@ -54,12 +54,16 @@ const accountFormSchema = z.object({
     .max(30, {
       message: 'Name must not be longer than 30 characters.',
     }),
-  dob: z.date({
-    required_error: 'A date of birth is required.',
-  }),
-  language: z.string({
-    required_error: 'Please select a language.',
-  }),
+  dob: z
+    .string()
+    .nonempty({ message: 'A date of birth is required.' })
+    .refine((val) => !isNaN(Date.parse(val)), {
+      message: 'Invalid date format.',
+    }),
+
+  language: z
+    .string()
+    .nonempty({ message: 'Please select a language.' }),
 })
 
 type AccountFormValues = z.infer<typeof accountFormSchema>
